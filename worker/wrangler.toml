@@ -11,6 +11,7 @@ compatibility_date = "2026-07-01"
 [vars]
 # Optional: Resend segment to add new contacts to.
 RESEND_SEGMENT_ID = "RESEND_SEGMENT_ID"
+RESEND_API_KEY = "RESEND_API_KEY"
 
 # Secret (never in this file):
 #   npx wrangler secret put RESEND_API_KEY
