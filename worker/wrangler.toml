@@ -13,5 +13,6 @@ compatibility_date = "2026-07-01"
 RESEND_SEGMENT_ID = "RESEND_SEGMENT_ID"
 RESEND_API_KEY = "RESEND_API_KEY"
 
-# Secret (never in this file):
-#   npx wrangler secret put RESEND_API_KEY
+[observability.logs]
+enabled = true
+invocation_logs = true
