@@ -45,9 +45,6 @@ bounces, and suppression. Free tier: 3,000 emails/month, 100/day.
 
 ## Notes
 
-- CORS is locked to bajaaibuilders.com, baja-ai-builders.github.io, and
-  localhost:8873 (edit `ALLOWED_ORIGINS` in `src/index.js`).
-- The form includes a hidden `website` honeypot field; the worker silently
-  accepts and drops those submissions.
+- Allowed origins live in `ALLOWED_ORIGINS` in `index.js`.
 - Duplicate signups return success to the visitor.
 - Single opt-in: contacts are added without a confirmation email.

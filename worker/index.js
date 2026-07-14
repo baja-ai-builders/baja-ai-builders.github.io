@@ -36,6 +36,14 @@ export default {
       return json({ error: "not_found" }, 404, cors);
     }
 
+    if (env.LIMITER) {
+      const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+      const { success } = await env.LIMITER.limit({ key: ip });
+      if (!success) {
+        return json({ error: "slow_down" }, 429, cors);
+      }
+    }
+
     let email;
     try {
       const body = await request.json();
