@@ -316,6 +316,67 @@ a {
   color: var(--cream-faint);
 }
 
+/* Subscribe form -------------------------------------------------------------- */
+
+.subscribe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
+}
+.subscribe[hidden] {
+  display: none;
+}
+
+.subscribe .btn {
+  margin-top: 0;
+}
+
+.subscribe__input {
+  flex: 1;
+  min-width: 13rem;
+  padding: 0.7rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--cream);
+  background: rgba(245, 240, 230, 0.06);
+  border: 1px solid var(--line-on-dark);
+  border-radius: 4px;
+}
+.subscribe__input::placeholder {
+  color: var(--cream-faint);
+}
+.subscribe__input:focus-visible {
+  outline: none;
+  border-color: var(--orange);
+}
+
+/* honeypot — visually gone, still in the form for bots */
+.subscribe__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.subscribe__msg--error {
+  color: var(--orange);
+}
+
+.follow a {
+  color: var(--cream);
+  text-decoration-color: var(--cream-faint);
+  text-underline-offset: 3px;
+  transition: color 140ms ease;
+}
+.follow a:hover {
+  color: var(--orange);
+}
+.follow {
+  color: var(--cream-dim);
+}
+
 /* Blinking cursor (only when motion is OK) ---------------------------------------- */
 
 .cursor {

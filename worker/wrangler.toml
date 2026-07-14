@@ -2,11 +2,9 @@ name = "baja-ai-builders-newsletter"
 main = "index.js"
 compatibility_date = "2026-07-01"
 
-# Route the worker on your own domain (requires the zone on Cloudflare),
-# or skip this and use the default *.workers.dev URL.
-# routes = [
-#   { pattern = "newsletter.bajaaibuilders.com", custom_domain = true }
-# ]
+routes = [
+  { pattern = "newsletter.bajaaibuilders.com", custom_domain = true }
+]
 
 [observability.logs]
 enabled = true

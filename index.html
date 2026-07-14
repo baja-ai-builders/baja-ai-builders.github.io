@@ -158,20 +158,48 @@
 
                     <p class="line cmd">
                         <span class="prompt" aria-hidden="true">$</span>
-                        <span class="typed">./siguenos.sh</span>
+                        <span class="typed">./suscribete.sh</span>
                     </p>
                     <div class="line out cta">
-                        <a
-                            class="btn"
-                            href="https://x.com/BajaAIBuilders"
-                            rel="noopener"
-                            >Síguenos →</a
-                        >
-                        <p class="hint">
-                            <span aria-hidden="true"># </span>@BajaAIBuilders —
-                            ahí anunciamos todo
+                        <form class="subscribe" novalidate>
+                            <label class="sr-only" for="subscribe-email"
+                                >Correo electrónico</label
+                            >
+                            <input
+                                class="subscribe__input"
+                                id="subscribe-email"
+                                name="email"
+                                type="email"
+                                required
+                                autocomplete="email"
+                                placeholder="tu@correo.com"
+                            />
+                            <input
+                                class="subscribe__hp"
+                                type="text"
+                                name="website"
+                                tabindex="-1"
+                                autocomplete="off"
+                                aria-hidden="true"
+                            />
+                            <button class="btn" type="submit">Avísame</button>
+                        </form>
+                        <p class="hint subscribe__msg" aria-live="polite">
+                            <span aria-hidden="true"># </span>te avisamos
+                            cuando haya fecha — sin spam
                         </p>
                     </div>
+
+                    <p class="line cmd">
+                        <span class="prompt" aria-hidden="true">$</span>
+                        <span class="typed">./siguenos.sh</span>
+                    </p>
+                    <p class="line out follow">
+                        <a href="https://x.com/BajaAIBuilders" rel="noopener"
+                            >@BajaAIBuilders</a
+                        >
+                        en X
+                    </p>
 
                     <p class="line cmd" aria-hidden="true">
                         <span class="prompt">$</span>
@@ -213,6 +241,57 @@
             </nav>
         </footer>
 
+        <script>
+            (function () {
+                var SUBSCRIBE_ENDPOINT =
+                    "https://baja-ai-builders-newsletter.abimex.workers.dev/subscribe";
+
+                var form = document.querySelector(".subscribe");
+                var input = document.getElementById("subscribe-email");
+                var button = form.querySelector("button");
+                var msg = document.querySelector(".subscribe__msg");
+
+                function say(text, isError) {
+                    msg.textContent = "# " + text;
+                    msg.classList.toggle("subscribe__msg--error", !!isError);
+                }
+
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    var email = input.value.trim();
+                    if (!email || !input.checkValidity()) {
+                        say("ese correo no se ve bien — revísalo", true);
+                        input.focus();
+                        return;
+                    }
+                    button.disabled = true;
+                    button.textContent = "...";
+                    fetch(SUBSCRIBE_ENDPOINT, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            email: email,
+                            website: form.elements.website.value,
+                        }),
+                    })
+                        .then(function (res) {
+                            if (!res.ok) throw new Error(res.status);
+                            form.hidden = true;
+                            say("listo ✓ te avisamos cuando haya fecha");
+                        })
+                        .catch(function () {
+                            say(
+                                "algo falló — intenta de nuevo o escríbenos a contact@bajaaibuilders.com",
+                                true,
+                            );
+                        })
+                        .finally(function () {
+                            button.disabled = false;
+                            button.textContent = "Avísame";
+                        });
+                });
+            })();
+        </script>
         <script>
             (function () {
                 var root = document.documentElement;
