@@ -1,0 +1,336 @@
+/* ==========================================================================
+   Baja AI Builders — leaked-terminal coming soon
+   Plain CSS, no build step, no JS. Palette + type per brand spec.
+   ========================================================================== */
+
+:root {
+  --navy: #071a26;
+  --navy-deep: #04121b;
+  --navy-dim: rgba(7, 26, 38, 0.75);
+  --navy-faint: rgba(7, 26, 38, 0.5);
+  --cream: #f5f0e6;
+  --cream-dim: rgba(245, 240, 230, 0.72);
+  --cream-faint: rgba(245, 240, 230, 0.4);
+  --orange: #ff6b35;
+  --orange-dark: #b84a18; /* accent that passes AA as text on cream */
+  --line: rgba(7, 26, 38, 0.16);
+  --line-on-dark: rgba(245, 240, 230, 0.14);
+
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+
+  /* typing choreography */
+  --step: 0.24s;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--navy);
+  background-color: var(--cream);
+  background-image: radial-gradient(rgba(7, 26, 38, 0.09) 1px, transparent 1px);
+  background-size: 26px 26px;
+  -webkit-font-smoothing: antialiased;
+}
+
+p,
+h1 {
+  margin: 0;
+}
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--orange-dark);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.accent {
+  color: var(--orange-dark);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Top bar ------------------------------------------------------------------ */
+
+.top {
+  display: flex;
+  justify-content: center;
+  padding: 1.75rem 1.5rem 0;
+}
+
+.brand {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+}
+
+/* Layout --------------------------------------------------------------------- */
+
+.wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2rem, 5vh, 4rem) 1.5rem;
+}
+
+/* Terminal ------------------------------------------------------------------- */
+
+.terminal {
+  width: min(100%, 40rem);
+  color: var(--cream);
+  background: var(--navy);
+  border: 1px solid var(--navy);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 32px 64px -28px rgba(7, 26, 38, 0.55);
+}
+
+.terminal__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.7rem 1.1rem;
+  background: var(--navy-deep);
+  border-bottom: 1px solid var(--line-on-dark);
+}
+
+.terminal__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(245, 240, 230, 0.22);
+}
+
+.terminal__path {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--cream-faint);
+}
+
+.terminal__body {
+  padding: 1.5rem clamp(1.1rem, 4vw, 2rem) 1.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  line-height: 1.9;
+}
+
+/* Session lines ---------------------------------------------------------------- */
+
+.cmd {
+  color: var(--cream-dim);
+}
+
+.prompt {
+  color: var(--orange);
+  font-weight: 500;
+}
+
+.out {
+  padding-left: 1.15rem;
+  margin-bottom: 1.1rem;
+}
+
+.title {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: clamp(1.65rem, 5.5vw, 2.4rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.desc {
+  color: var(--cream-dim);
+  max-width: 32rem;
+}
+
+.cities {
+  color: var(--cream-dim);
+  letter-spacing: 0.02em;
+}
+
+.cities span {
+  display: inline-block;
+  margin-right: 1.25ch;
+}
+
+.record p {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 9ch minmax(0, 1fr);
+}
+
+.record__key {
+  color: var(--cream-faint);
+}
+
+.redacted {
+  color: rgba(245, 240, 230, 0.5);
+  user-select: none;
+}
+
+.soon {
+  color: var(--orange);
+  font-weight: 500;
+}
+
+/* CTA ----------------------------------------------------------------------------- */
+
+.btn {
+  display: inline-block;
+  margin-top: 0.35rem;
+  padding: 0.7rem 1.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--navy);
+  background: var(--orange);
+  border: 1px solid var(--orange);
+  border-radius: 4px;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease;
+}
+.btn:hover {
+  color: var(--navy);
+  background: var(--cream);
+  border-color: var(--cream);
+}
+.terminal .btn:focus-visible {
+  outline-color: var(--cream);
+}
+
+.hint {
+  margin-top: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--cream-faint);
+}
+
+/* Cursor ------------------------------------------------------------------------ */
+
+.cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  vertical-align: text-bottom;
+  background: var(--orange);
+}
+
+/* Choreography (only when motion is OK) ------------------------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .line {
+    opacity: 0;
+    animation: appear 0.2s ease-out forwards;
+    animation-delay: calc(var(--i) * var(--step));
+  }
+
+  .typed {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: bottom;
+    width: 0;
+    animation: typing calc(var(--step) * 0.85) steps(var(--n)) forwards;
+    animation-delay: calc(var(--i, 0) * var(--step));
+  }
+
+  .cursor {
+    animation: blink 1.1s steps(1) infinite;
+  }
+}
+
+@keyframes appear {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes typing {
+  to {
+    width: calc(var(--n) * 1ch);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Footer -------------------------------------------------------------------------- */
+
+.footer {
+  padding: 1.75rem 1.5rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--navy-faint);
+  text-align: center;
+}
+
+.footer__links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem 1rem;
+}
+
+.footer__links li + li::before {
+  content: "·";
+  color: var(--orange-dark);
+  margin-right: 1rem;
+}
+
+.footer a {
+  color: var(--navy-dim);
+  text-decoration-color: var(--navy-faint);
+  text-underline-offset: 3px;
+  transition: color 140ms ease;
+}
+.footer a:hover {
+  color: var(--orange-dark);
+}
+
+/* Reduced motion: kill transitions too */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
