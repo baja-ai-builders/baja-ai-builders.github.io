@@ -1,0 +1,16 @@
+name = "baja-newsletter"
+main = "index.js"
+compatibility_date = "2026-07-01"
+
+# Route the worker on your own domain (requires the zone on Cloudflare),
+# or skip this and use the default *.workers.dev URL.
+# routes = [
+#   { pattern = "newsletter.bajaaibuilders.com", custom_domain = true }
+# ]
+
+[vars]
+# Optional: Resend segment to add new contacts to.
+RESEND_SEGMENT_ID = "RESEND_SEGMENT_ID"
+
+# Secret (never in this file):
+#   npx wrangler secret put RESEND_API_KEY
