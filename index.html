@@ -47,6 +47,22 @@
         <meta name="theme-color" content="#F5F0E6" />
         <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 
+        <!-- Set theme before first paint to avoid a flash -->
+        <script>
+            (function () {
+                var saved;
+                try {
+                    saved = localStorage.getItem("theme");
+                } catch (e) {}
+                document.documentElement.dataset.theme =
+                    saved ||
+                    (window.matchMedia &&
+                    matchMedia("(prefers-color-scheme: dark)").matches
+                        ? "dark"
+                        : "light");
+            })();
+        </script>
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -61,6 +77,13 @@
             <p class="brand">
                 <span class="accent" aria-hidden="true">&gt;_</span> BAJA
             </p>
+            <button
+                class="theme-toggle"
+                type="button"
+                aria-label="Cambiar tema"
+            >
+                <span class="theme-toggle__icon" aria-hidden="true"></span>
+            </button>
         </header>
 
         <main class="wrap">
@@ -189,5 +212,45 @@
                 </ul>
             </nav>
         </footer>
+
+        <script>
+            (function () {
+                var root = document.documentElement;
+                var meta = document.querySelector('meta[name="theme-color"]');
+                var btn = document.querySelector(".theme-toggle");
+                function apply(theme) {
+                    root.dataset.theme = theme;
+                    meta.setAttribute(
+                        "content",
+                        theme === "dark" ? "#071A26" : "#F5F0E6",
+                    );
+                    btn.setAttribute(
+                        "aria-label",
+                        theme === "dark"
+                            ? "Cambiar a tema claro"
+                            : "Cambiar a tema oscuro",
+                    );
+                }
+                apply(root.dataset.theme);
+                btn.addEventListener("click", function () {
+                    var next =
+                        root.dataset.theme === "dark" ? "light" : "dark";
+                    apply(next);
+                    try {
+                        localStorage.setItem("theme", next);
+                    } catch (e) {}
+                });
+                matchMedia("(prefers-color-scheme: dark)").addEventListener(
+                    "change",
+                    function (e) {
+                        var saved;
+                        try {
+                            saved = localStorage.getItem("theme");
+                        } catch (err) {}
+                        if (!saved) apply(e.matches ? "dark" : "light");
+                    },
+                );
+            })();
+        </script>
     </body>
 </html>

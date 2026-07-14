@@ -1,23 +1,66 @@
 /* ==========================================================================
    Baja AI Builders — leaked-terminal coming soon
-   Plain CSS, no build step, no JS. Palette + type per brand spec.
+   Plain CSS, no build step. Palette + type per brand spec.
+   Theming: light by default, dark via [data-theme="dark"] (set by JS from
+   system preference or the toggle) with a prefers-color-scheme fallback
+   for no-JS visitors.
    ========================================================================== */
 
 :root {
+  /* raw palette */
   --navy: #071a26;
   --navy-deep: #04121b;
-  --navy-dim: rgba(7, 26, 38, 0.75);
-  --navy-faint: rgba(7, 26, 38, 0.5);
+  --navy-deeper: #030d14;
   --cream: #f5f0e6;
   --cream-dim: rgba(245, 240, 230, 0.72);
   --cream-faint: rgba(245, 240, 230, 0.4);
   --orange: #ff6b35;
   --orange-dark: #b84a18; /* accent that passes AA as text on cream */
-  --line: rgba(7, 26, 38, 0.16);
   --line-on-dark: rgba(245, 240, 230, 0.14);
+
+  /* light theme (default) */
+  --bg: var(--cream);
+  --grid: rgba(7, 26, 38, 0.09);
+  --ink: var(--navy);
+  --ink-dim: rgba(7, 26, 38, 0.75);
+  --ink-faint: rgba(7, 26, 38, 0.5);
+  --line: rgba(7, 26, 38, 0.16);
+  --accent-ui: var(--orange-dark);
+  --term-bg: var(--navy);
+  --term-bar: var(--navy-deep);
+  --card-border: var(--navy);
 
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-body: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* dark theme tokens (used twice: explicit toggle + no-JS system fallback) */
+:root[data-theme="dark"] {
+  --bg: var(--navy);
+  --grid: rgba(245, 240, 230, 0.07);
+  --ink: var(--cream);
+  --ink-dim: var(--cream-dim);
+  --ink-faint: var(--cream-faint);
+  --line: var(--line-on-dark);
+  --accent-ui: var(--orange);
+  --term-bg: var(--navy-deep);
+  --term-bar: var(--navy-deeper);
+  --card-border: var(--line-on-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: var(--navy);
+    --grid: rgba(245, 240, 230, 0.07);
+    --ink: var(--cream);
+    --ink-dim: var(--cream-dim);
+    --ink-faint: var(--cream-faint);
+    --line: var(--line-on-dark);
+    --accent-ui: var(--orange);
+    --term-bg: var(--navy-deep);
+    --term-bar: var(--navy-deeper);
+    --card-border: var(--line-on-dark);
+  }
 }
 
 *,
@@ -34,9 +77,9 @@ body {
   font-family: var(--font-body);
   font-size: 1.0625rem;
   line-height: 1.65;
-  color: var(--navy);
-  background-color: var(--cream);
-  background-image: radial-gradient(rgba(7, 26, 38, 0.09) 1px, transparent 1px);
+  color: var(--ink);
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--grid) 1px, transparent 1px);
   background-size: 26px 26px;
   -webkit-font-smoothing: antialiased;
 }
@@ -50,13 +93,13 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--orange-dark);
+  outline: 2px solid var(--accent-ui);
   outline-offset: 3px;
   border-radius: 2px;
 }
 
 .accent {
-  color: var(--orange-dark);
+  color: var(--accent-ui);
 }
 
 .sr-only {
@@ -74,7 +117,9 @@ a {
 /* Top bar ------------------------------------------------------------------ */
 
 .top {
+  position: relative;
   display: flex;
+  align-items: center;
   justify-content: center;
   padding: 1.75rem 1.5rem 0;
 }
@@ -84,6 +129,45 @@ a {
   font-weight: 600;
   font-size: 1.05rem;
   letter-spacing: 0.08em;
+}
+
+.theme-toggle {
+  position: absolute;
+  right: clamp(1.5rem, 4vw, 3rem);
+  top: 50%;
+  transform: translateY(calc(-50% + 0.875rem));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--ink-dim);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    color 140ms ease,
+    border-color 140ms ease;
+}
+.theme-toggle:hover {
+  color: var(--accent-ui);
+  border-color: var(--accent-ui);
+}
+
+.theme-toggle__icon::before {
+  content: "☾";
+}
+:root[data-theme="dark"] .theme-toggle__icon::before {
+  content: "☀";
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle__icon::before {
+    content: "☀";
+  }
 }
 
 /* Layout --------------------------------------------------------------------- */
@@ -96,16 +180,16 @@ a {
   padding: clamp(2rem, 5vh, 4rem) 1.5rem;
 }
 
-/* Terminal ------------------------------------------------------------------- */
+/* Terminal (always dark, in both themes) --------------------------------------- */
 
 .terminal {
   width: min(100%, 40rem);
   color: var(--cream);
-  background: var(--navy);
-  border: 1px solid var(--navy);
+  background: var(--term-bg);
+  border: 1px solid var(--card-border);
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 32px 64px -28px rgba(7, 26, 38, 0.55);
+  box-shadow: 0 32px 64px -28px rgba(3, 13, 20, 0.55);
 }
 
 .terminal__bar {
@@ -113,7 +197,7 @@ a {
   align-items: center;
   gap: 0.45rem;
   padding: 0.7rem 1.1rem;
-  background: var(--navy-deep);
+  background: var(--term-bar);
   border-bottom: 1px solid var(--line-on-dark);
 }
 
@@ -160,6 +244,7 @@ a {
   font-size: clamp(1.65rem, 5.5vw, 2.4rem);
   line-height: 1.2;
   letter-spacing: -0.015em;
+  color: var(--cream);
 }
 
 .desc {
@@ -231,7 +316,7 @@ a {
   color: var(--cream-faint);
 }
 
-/* Cursor ------------------------------------------------------------------------ */
+/* Blinking cursor (only when motion is OK) ---------------------------------------- */
 
 .cursor {
   display: inline-block;
@@ -240,8 +325,6 @@ a {
   vertical-align: text-bottom;
   background: var(--orange);
 }
-
-/* Blinking cursor (only when motion is OK) ---------------------------------------- */
 
 @media (prefers-reduced-motion: no-preference) {
   .cursor {
@@ -262,7 +345,7 @@ a {
   border-top: 1px solid var(--line);
   font-family: var(--font-mono);
   font-size: 0.82rem;
-  color: var(--navy-faint);
+  color: var(--ink-faint);
   text-align: center;
 }
 
@@ -279,18 +362,18 @@ a {
 
 .footer__links li + li::before {
   content: "·";
-  color: var(--orange-dark);
+  color: var(--accent-ui);
   margin-right: 1rem;
 }
 
 .footer a {
-  color: var(--navy-dim);
-  text-decoration-color: var(--navy-faint);
+  color: var(--ink-dim);
+  text-decoration-color: var(--ink-faint);
   text-underline-offset: 3px;
   transition: color 140ms ease;
 }
 .footer a:hover {
-  color: var(--orange-dark);
+  color: var(--accent-ui);
 }
 
 /* Reduced motion: kill transitions too */
